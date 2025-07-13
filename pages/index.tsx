@@ -100,7 +100,7 @@ export default function Home() {
             Welcome to <span className="text-emerald-400">GloriousTwins Radio</span>
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Tune in to the heartbeat of Ibadan — your ultimate source for uplifting music, inspiring voices, and unforgettable moments.
+            Tune in to the heartbeat of Ibadan your ultimate source for uplifting music, inspiring voices, and unforgettable moments.
           </p>
 
           <div className="inline-flex space-x-4">
@@ -193,8 +193,8 @@ export default function Home() {
             </h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
               {[
-                { name: 'Ilesanmi Victoria', image: '/presenters/victoria.jpg' },
-                { name: 'Olalere Taiwo', image: '/presenters/taiwo.jpg' },
+                // { name: 'Ilesanmi Victoria', image: '/presenters/victoria.jpg' },
+                // { name: 'Olalere Taiwo', image: '/presenters/taiwo.jpg' },
               ].map((presenter, idx) => (
                 <div
                   key={idx}
