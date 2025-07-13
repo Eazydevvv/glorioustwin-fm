@@ -113,7 +113,7 @@ export default function Home() {
       </div>
 
       {/* Live Player Section */}
-      <div className="max-w-4xl mx-auto px-4 -mt-12">
+      <div className="max-w-4xl mx-auto px-4 -mt-12 hidden md:block">
         <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
           <div className="p-6">
             <div className="flex items-center space-x-4">
