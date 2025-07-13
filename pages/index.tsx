@@ -100,8 +100,9 @@ export default function Home() {
             Welcome to <span className="text-emerald-400">GloriousTwins Radio</span>
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Your premier destination for the finest music and entertainment in Ibadan
+            Tune in to the heartbeat of Ibadan — your ultimate source for uplifting music, inspiring voices, and unforgettable moments.
           </p>
+
           <div className="inline-flex space-x-4">
             <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-full font-medium transition-colors shadow-lg">
               Tune In Now
@@ -217,7 +218,7 @@ export default function Home() {
           {/* Mission Statement */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <p className="text-lg text-gray-300 italic">
-              "At GloriousTwin FM, we go beyond just radio — we are a voice for the people, a hub for inspiration,
+              "At GloriousTwin FM, we go beyond just radio  we are a voice for the people, a hub for inspiration,
               and a celebration of culture, faith, and creativity. From heartwarming music to powerful conversations,
               we connect our community with purpose, passion, and excellence."
             </p>
@@ -266,7 +267,7 @@ export default function Home() {
               <address className="not-italic text-gray-300 space-y-2">
                 <p>📍 Block B, Shop 19, Bashorun Islamic Ultra-Modern Complex, Ibadan, Oyo State, Nigeria</p>
 
-                <p>📞 +234  803 460 1101 , +234 913 870 1370 </p>
+                <p>📞 +234  803 460 1101 , +234 915 987 9319 </p>
                 <p>⏰ Station operations: 5AM - 12AM daily</p>
                 <p>✉️ glorioustwinsmediahub@gmail.com</p>
               </address>
