@@ -1,5 +1,6 @@
 // pages/index.tsx
 import Image from 'next/image';
+
 import { useEffect, useState } from 'react';
 
 
@@ -51,7 +52,7 @@ export default function Home() {
               <span className="text-white text-xl font-bold">GT</span>
             </div>
             <h1 className="text-2xl font-bold text-gray-800">
-              <span className="text-emerald-600">GloriousTwin</span> FM
+              <span className="text-emerald-600">GloriousTwins</span> FM
             </h1>
           </div>
           <div className="hidden md:flex space-x-8">
@@ -96,7 +97,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative max-w-4xl mx-auto text-center px-4 text-white">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            Welcome to <span className="text-emerald-400">GloriousTwin FM</span>
+            Welcome to <span className="text-emerald-400">GloriousTwins FM</span>
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Your premier destination for the finest music and entertainment in Ibadan
@@ -184,10 +185,39 @@ export default function Home() {
       </div>
       <footer className="bg-gray-900 text-white py-12 px-4 mt-20">
         <div className="max-w-7xl mx-auto">
+          {/* Meet the Presenters Section */}
+          <div className="max-w-7xl mx-auto px-4 py-20">
+            <h3 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">
+              🎙️ Meet Our Presenters
+            </h3>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
+              {[
+                { name: 'Ilesanmi Victoria', image: '/presenters/victoria.jpg' },
+                { name: 'Olalere Taiwo', image: '/presenters/taiwo.jpg' },
+              ].map((presenter, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300"
+                  >
+                    <img
+                      src={presenter.image}
+                      alt={presenter.name}
+                      className="w-full h-64 object-cover rounded-t-2xl"
+                    />
+                    <div className="p-6 text-center">
+                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">{presenter.name}</h4>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">On-Air Personality</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+
           {/* Mission Statement */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <p className="text-lg text-gray-300 italic">
-              "GloriousTwin FM is not merely a radio station; it is a tapestry of dreams, a conduit for unity,
+              "GloriousTwins FM is not merely a radio station; it is a tapestry of dreams, a conduit for unity,
               and a platform for inspiration. Join us on this exhilarating journey, and together,
               we will stay on top of the world."
             </p>
@@ -233,17 +263,18 @@ export default function Home() {
             <div>
               <h3 className="text-xl font-bold mb-4 text-emerald-400">Contact</h3>
               <address className="not-italic text-gray-300 space-y-2">
-                <p>📍 Top Success Mall, Beside Wema Bank Plc,<br />Mokola, Ibadan, Oyo State Nigeria</p>
-                <p>📞 +234 915 900 1053</p>
+                <p>📍 Block B, Shop 19, Bashorun Islamic Ultra-Modern Complex, Ibadan, Oyo State, Nigeria</p>
+
+                <p>📞 +234  803 460 1101</p>
                 <p>⏰ Station operations: 5AM - 12AM daily</p>
-                <p>✉️ glorious.twin.fm@gmail.com</p>
+                <p>✉️ glorioustwinsmediahub@gmail.com</p>
               </address>
             </div>
           </div>
 
           {/* Copyright */}
           <div className="border-t border-gray-800 mt-12 pt-6 text-center text-gray-400">
-            <p>© {new Date().getFullYear()} GloriousTwin FM | All Rights Reserved</p>
+            <p>© {new Date().getFullYear()} GloriousTwins FM | All Rights Reserved</p>
           </div>
         </div>
       </footer>
