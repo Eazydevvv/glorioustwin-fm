@@ -193,8 +193,7 @@ export default function Home() {
             </h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
               {[
-                // { name: 'Ilesanmi Victoria', image: '/presenters/victoria.jpg' },
-                // { name: 'Olalere Taiwo', image: '/presenters/taiwo.jpg' },
+                { name: 'Olalere Taiwo', image: '/presenters/taiwo.jpg' },
               ].map((presenter, idx) => (
                 <div
                   key={idx}
