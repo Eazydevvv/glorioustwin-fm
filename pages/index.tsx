@@ -189,7 +189,7 @@ export default function Home() {
           {/* Meet the Presenters Section */}
           <div className="max-w-7xl mx-auto px-4 py-20">
             <h3 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">
-              🎙️ Meet Our Presenters
+               Meet Our Team
             </h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
               {[
@@ -206,7 +206,7 @@ export default function Home() {
                   />
                   <div className="p-6 text-center">
                     <h4 className="text-lg font-bold text-gray-900 dark:text-white">{presenter.name}</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">On-Air Personality</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Chairman</p>
                   </div>
                 </div>
               ))}
