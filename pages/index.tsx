@@ -1,12 +1,9 @@
-// pages/index.tsx
 import Image from 'next/image';
-
 import { useEffect, useState } from 'react';
-
 
 export default function Home() {
   const [nowPlaying, setNowPlaying] = useState("Loading...");
-
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const fetchNowPlaying = async () => {
@@ -23,7 +20,6 @@ export default function Home() {
     const interval = setInterval(fetchNowPlaying, 10000); // every 10 seconds
     return () => clearInterval(interval);
   }, []);
-  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme');
@@ -39,8 +35,6 @@ export default function Home() {
     }
   }, []);
 
-
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
 
@@ -48,9 +42,12 @@ export default function Home() {
       <nav className="bg-white border-b border-gray-200 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center shadow-md">
-              <span className="text-white text-xl font-bold">GT</span>
-            </div>
+            <img
+              src="/presenters/logo.jpg"
+              alt="GloriousTwin Logo"
+              className="w-12 h-12 rounded-full shadow-md object-cover"
+            />
+
             <h1 className="text-2xl font-bold text-gray-800">
               <span className="text-emerald-600">GloriousTwins</span> Radio
             </h1>
@@ -60,34 +57,32 @@ export default function Home() {
             <a href="/schedule" className="text-gray-700 hover:text-emerald-600 font-medium">Schedule</a>
             <a href="#" className="text-gray-700 hover:text-emerald-600 font-medium">DJs</a>
             <a href="#" className="text-gray-700 hover:text-emerald-600 font-medium">Contact</a>
-
+            <a href="/about" className="text-gray-700 hover:text-emerald-600 font-medium">About</a>
+            <a href="/privacy" className="text-gray-700 hover:text-emerald-600 font-medium">Privacy Policy</a>
           </div>
-          <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors shadow-sm">
+
+          <div className="md:hidden">
+            {/* Responsive nav icon */}
+            <details className="relative">
+            <summary className="list-none cursor-pointer text-black text-3xl hover:text-emerald-600 transition-colors">☰</summary>
+
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                <a href="/" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Home</a>
+                <a href="/schedule" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Schedule</a>
+                <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">DJs</a>
+                <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Contact</a>
+                <a href="/about" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">About</a>
+                <a href="/privacy" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Privacy Policy</a>
+              </div>
+            </details>
+          </div>
+
+          <button className="hidden md:inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors shadow-sm">
             Listen Live
           </button>
-          <div className="ml-4 flex items-center space-x-2">
-            <span className="text-sm text-gray-600 dark:text-gray-300">🌙</span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isDark}
-                onChange={() => {
-                  const html = document.documentElement;
-                  const newTheme = html.classList.contains('dark') ? 'light' : 'dark';
-                  html.classList.toggle('dark');
-                  localStorage.setItem('theme', newTheme);
-                  setIsDark(newTheme === 'dark');
-                }}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-emerald-600 transition-colors duration-300">
-                <div className="w-5 h-5 bg-white rounded-full shadow-md transform peer-checked:translate-x-5 transition-transform duration-300"></div>
-              </div>
-            </label>
-            <span className="text-sm text-gray-600 dark:text-gray-300">☀️</span>
-          </div>
 
-
+          
+            
 
         </div>
       </nav>
@@ -189,7 +184,7 @@ export default function Home() {
           {/* Meet the Presenters Section */}
           <div className="max-w-7xl mx-auto px-4 py-20">
             <h3 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">
-               Meet Our Team
+              Meet Our Team
             </h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
               {[
