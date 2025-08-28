@@ -4,18 +4,15 @@ import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 export default function Home() {
-  // ====== STATE ======
   const [nowPlaying, setNowPlaying] = useState('Loading…')
   const [isDark, setIsDark] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [isLiveError, setIsLiveError] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  // ====== CONSTANTS ======
   const STREAM_URL = 'https://stream.zeno.fm/hnuqg3vbh41tv'
   const META_URL = 'https://stream.zeno.fm/hnuqg3vbh41tv/metadata'
 
-  // ====== EFFECT: FETCH NOW PLAYING (with cleanup + jitter) ======
   useEffect(() => {
     let mounted = true
     let retries = 0
@@ -38,7 +35,6 @@ export default function Home() {
       }
     }
 
-    // initial + interval with slight jitter to avoid thundering herd
     fetchNowPlaying()
     const id = setInterval(fetchNowPlaying, 10000 + Math.round(Math.random() * 1500))
     return () => {
@@ -48,7 +44,6 @@ export default function Home() {
     }
   }, [])
 
-  // ====== EFFECT: THEME (persist + system) ======
   useEffect(() => {
     const stored = localStorage.getItem('theme')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -64,17 +59,13 @@ export default function Home() {
     localStorage.setItem('theme', next ? 'dark' : 'light')
   }
 
-  // ====== UTIL: scroll to player ======
   const onListenLive = () => {
     document.getElementById('live-player')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    // focus the audio for keyboard users
     setTimeout(() => audioRef.current?.focus(), 500)
   }
 
-  // ====== ACCESSIBLE KEY HANDLERS ======
   const toggleMenu = () => setMenuOpen((v) => !v)
 
-  // ====== Derived initials for avatars ======
   const toInitials = (name: string) =>
     name
       .split(' ')
@@ -87,7 +78,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
-      {/* ===== SEO / META ===== */}
       <Head>
         <title>GloriousTwins Radio — Live from Ibadan</title>
         <meta name="description" content="GloriousTwins Radio: uplifting music, inspiring voices, and unforgettable moments. Streaming live from Ibadan, Nigeria." />
@@ -99,7 +89,6 @@ export default function Home() {
         <link rel="preconnect" href="https://stream.zeno.fm" />
       </Head>
 
-      {/* ===== Premium Navigation Bar (kept, enhanced) ===== */}
       <nav className="bg-white dark:bg-gray-900/80 backdrop-blur border-b border-gray-200/60 dark:border-gray-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -118,7 +107,6 @@ export default function Home() {
             </h1>
           </div>
 
-          {/* Desktop links (kept) */}
           <div className="hidden md:flex items-center gap-8">
             <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">Home</Link>
             <Link href="/schedule" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">Schedule</Link>
@@ -143,7 +131,6 @@ export default function Home() {
               Listen Live
             </button>
 
-            {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
               className="md:hidden text-3xl leading-none text-black dark:text-white focus:outline-none"
@@ -156,7 +143,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Mobile dropdown (kept concept, improved a11y) */}
         {menuOpen && (
           <div id="mobile-menu" className="md:hidden px-4 pb-3 animate-in fade-in zoom-in-95 duration-150 origin-top">
             <div className="mt-2 w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg py-2">
@@ -175,7 +161,6 @@ export default function Home() {
         )}
       </nav>
 
-      {/* ===== Hero Section (kept) ===== */}
       <div className="relative py-20 bg-[url('/studio-bg.jpg')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative max-w-4xl mx-auto text-center px-4 text-white">
@@ -197,7 +182,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ===== Live Player Section (kept) ===== */}
       <div id="live-player" className="max-w-4xl mx-auto px-4 -mt-12 hidden md:block">
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800">
           <div className="p-6">
@@ -248,7 +232,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ===== Shows Section (kept) ===== */}
       <div className="max-w-7xl mx-auto px-4 py-16">
         <h3 className="text-2xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100">Today's Schedule</h3>
         <div className="grid md:grid-cols-3 gap-6">
@@ -286,7 +269,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ===== Footer (kept, optimized images) ===== */}
       <footer className="bg-gray-900 text-white py-12 px-4 mt-20">
         <div className="max-w-7xl mx-auto">
           {/* Meet the Presenters Section */}
@@ -314,7 +296,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Mission Statement */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <p className="text-lg text-gray-300 italic">
               "At GloriousTwin FM, we go beyond just radio — we are a voice for the people, a hub for inspiration,
@@ -324,7 +305,6 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Social Media */}
             <div>
               <h3 className="text-xl font-bold mb-4 text-emerald-400">Connect With Us</h3>
               <div className="flex space-x-4">
@@ -347,7 +327,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Quick Links */}
             <div>
               <h3 className="text-xl font-bold mb-4 text-emerald-400">Quick Links</h3>
               <ul className="space-y-2">
@@ -359,7 +338,6 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Contact Info */}
             <div>
               <h3 className="text-xl font-bold mb-4 text-emerald-400">Contact</h3>
               <address className="not-italic text-gray-300 space-y-2">
@@ -371,14 +349,12 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Copyright */}
           <div className="border-t border-gray-800 mt-12 pt-6 text-center text-gray-400">
             <p>© {year} GloriousTwins Radio | All Rights Reserved</p>
           </div>
         </div>
       </footer>
 
-      {/* ===== Mobile fixed player (kept) ===== */}
       <div className="fixed bottom-0 left-0 right-0 bg-emerald-700 text-white flex items-center justify-between px-4 py-3 md:hidden z-50 shadow-lg">
         <div className="flex flex-col min-w-0">
           <span className="text-sm font-semibold leading-none">🎧 GT Radio Live</span>
@@ -389,3 +365,4 @@ export default function Home() {
     </div>
   )
 }
+
