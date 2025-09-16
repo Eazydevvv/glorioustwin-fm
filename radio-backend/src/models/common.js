@@ -1,8 +1,12 @@
-export const toSlug = (text) =>
-    text
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+// common.js
+
+export function toSlug(text) {
+    return text
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")       // Replace spaces with -
+      .replace(/[^\w\-]+/g, "")   // Remove all non-word chars
+      .replace(/\-\-+/g, "-");    // Replace multiple - with single -
+  }
+  

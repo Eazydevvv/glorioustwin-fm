@@ -7,7 +7,6 @@ export const buildPagination = (req) => {
     
     
     export const makeFileUrl = (req, filename) => {
-    if (!filename) return undefined;
-    const base = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
-    return `${base}/uploads/${filename}`;
-    };
+        if (!filename) return null;
+        return `${req.protocol}://${req.get('host')}/uploads/${filename}`;
+      };

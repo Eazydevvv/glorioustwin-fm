@@ -2,12 +2,29 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+
+interface News {
+  _id: string;
+  title: string;
+  summary: string;
+  content: string;
+  category: string;
+  author: string;
+  datetime: string;
+  image?: string;
+  imageUrl?: string;  
+}
 
 export default function Home() {
   const [nowPlaying, setNowPlaying] = useState('Loading…')
   const [isDark, setIsDark] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [isLiveError, setIsLiveError] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [latestNews, setLatestNews] = useState<News[]>([])
+  const [newsLoading, setNewsLoading] = useState(true)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const STREAM_URL = 'https://stream.zeno.fm/hnuqg3vbh41tv'
@@ -27,11 +44,13 @@ export default function Home() {
         setNowPlaying(title || 'No track info')
         setIsLiveError(false)
         retries = 0
+        setIsLoading(false)
       } catch (err) {
         if (!mounted) return
         retries++
         setIsLiveError(retries > 2)
         setNowPlaying('Unable to fetch track info')
+        setIsLoading(false)
       }
     }
 
@@ -43,6 +62,21 @@ export default function Home() {
       clearInterval(id)
     }
   }, [])
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/news');
+        const data = await response.json();
+        setLatestNews(data.items.slice(0, 3));
+      } catch (error) {
+        console.error('Failed to fetch news:', error);
+      } finally {
+        setNewsLoading(false);
+      }
+    };
+    fetchNews();
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem('theme')
@@ -110,10 +144,10 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-8">
             <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">Home</Link>
             <Link href="/schedule" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">Schedule</Link>
-            <Link href="#" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">DJs</Link>
-            <Link href="#" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">Contact</Link>
+            <Link href="#team" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">DJs</Link>
+            <Link href="#contact" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">Contact</Link>
             <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">About</Link>
-            <Link href="/privacy" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">Privacy Policy</Link>
+            <Link href="/news" className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 font-medium">News</Link>
           </div>
 
           <div className="flex items-center gap-3">
@@ -148,10 +182,10 @@ export default function Home() {
             <div className="mt-2 w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg py-2">
               <Link href="/" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Home</Link>
               <Link href="/schedule" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Schedule</Link>
-              <Link href="#" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">DJs</Link>
-              <Link href="#" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Contact</Link>
+              <Link href="#team" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">DJs</Link>
+              <Link href="#contact" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Contact</Link>
               <Link href="/about" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">About</Link>
-              <Link href="/privacy" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Privacy Policy</Link>
+              <Link href="/news" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">News</Link>
               <div className="px-4 pt-2 flex items-center justify-between">
                 <button onClick={toggleTheme} className="text-sm underline">{isDark ? 'Use light theme' : 'Use dark theme'}</button>
                 <button onClick={onListenLive} className="text-sm bg-emerald-600 text-white px-3 py-1.5 rounded-full">Listen</button>
@@ -164,26 +198,46 @@ export default function Home() {
       <div className="relative py-20 bg-[url('/studio-bg.jpg')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative max-w-4xl mx-auto text-center px-4 text-white">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
+          >
             Welcome to <span className="text-emerald-400">GloriousTwins Radio</span>
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-xl mb-8 max-w-2xl mx-auto"
+          >
             Tune in to the heartbeat of Ibadan — your ultimate source for uplifting music, inspiring voices, and unforgettable moments.
-          </p>
+          </motion.p>
 
-          <div className="inline-flex flex-wrap gap-4 justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="inline-flex flex-wrap gap-4 justify-center"
+          >
             <button onClick={onListenLive} className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-full font-medium transition-colors shadow-lg">
               Tune In Now
             </button>
             <Link href="#team" className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-full font-medium transition-colors backdrop-blur-sm">
               Meet The Team
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       <div id="live-player" className="max-w-4xl mx-auto px-4 -mt-12 hidden md:block">
-        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800"
+        >
           <div className="p-6">
             <div className="flex items-center gap-4">
               <div className="flex-shrink-0">
@@ -204,13 +258,25 @@ export default function Home() {
                   <p className="mt-1 text-sm text-amber-600 dark:text-amber-400">Having trouble fetching track info. Stream still plays fine.</p>
                 )}
 
-                <audio
-                  ref={audioRef}
-                  controls
-                  className="w-full mt-3 outline-none focus:ring-2 focus:ring-emerald-500 rounded"
-                  src={STREAM_URL}
-                  preload="none"
-                />
+                <div className="mt-3">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className={`w-3 h-3 rounded-full ${isPlaying ? 'bg-emerald-400 animate-pulse' : 'bg-gray-400'}`}></div>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      {isPlaying ? 'Live Now' : 'Paused'}
+                    </span>
+                  </div>
+
+                  <audio
+                    ref={audioRef}
+                    controls
+                    className="w-full outline-none focus:ring-2 focus:ring-emerald-500 rounded"
+                    src={STREAM_URL}
+                    preload="none"
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                    onError={() => setIsLiveError(true)}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -221,7 +287,7 @@ export default function Home() {
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">LIVE</span>
                 <button
                   onClick={() => navigator.clipboard.writeText(STREAM_URL)}
-                  className="text-xs underline"
+                  className="text-xs underline hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   title="Copy stream URL"
                 >
                   Copy URL
@@ -229,18 +295,33 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-16">
-        <h3 className="text-2xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100">Today's Schedule</h3>
+        <motion.h3
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-2xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100"
+        >
+          Today's Schedule
+        </motion.h3>
         <div className="grid md:grid-cols-3 gap-6">
           {[
             { time: '6:00 AM', title: 'Morning Vibes', host: 'DJ Dad' },
             { time: '10:00 AM', title: 'Midday Mix', host: 'Auntie B' },
             { time: '3:00 PM', title: 'Afternoon Delight', host: 'Uncle T' },
           ].map((show, index) => (
-            <div key={index} className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-800">
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-800"
+            >
               <div className="p-5">
                 <div className="flex justify-between items-start">
                   <div>
@@ -264,47 +345,162 @@ export default function Home() {
                   </svg>
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      <footer className="bg-gray-900 text-white py-12 px-4 mt-20">
+      {latestNews.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 py-16 bg-gray-50 dark:bg-gray-900">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">Latest News</h2>
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Stay updated with the latest happenings at GloriousTwin FM
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {latestNews.map((news, index) => (
+              <motion.article
+                key={news._id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden"
+              >
+                {news.imageUrl && ( // Changed from news.image to news.imageUrl
+                  <div className="relative h-48">
+                    <Image
+                      src={news.imageUrl} // Use the full URL directly
+                      alt={news.title}
+                      fill
+                      className="object-cover"
+                      onError={(e) => {
+                        // Hide image if it fails to load
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <span className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">
+                    {news.category}
+                  </span>
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-white mt-2 mb-3 line-clamp-2">
+                    {news.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 line-clamp-3 mb-4">
+                    {news.summary}
+                  </p>
+                  <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                    <span>By {news.author}</span>
+                    <span>{new Date(news.datetime).toLocaleDateString()}</span>
+                  </div>
+                  <Link
+                    href={`/news/${news._id}`}
+                    className="mt-4 inline-block text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium"
+                  >
+                    Read More →
+                  </Link>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="text-center mt-8"
+          >
+            <Link
+              href="/news"
+              className="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-medium transition-colors"
+            >
+              View All News
+              <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </Link>
+          </motion.div>
+        </div>
+      )}
+
+      <footer id="contact" className="bg-gray-900 text-white py-12 px-4 mt-20">
         <div className="max-w-7xl mx-auto">
-          {/* Meet the Presenters Section */}
           <div id="team" className="max-w-7xl mx-auto px-4 py-20">
-            <h3 className="text-3xl font-bold text-center mb-12">Meet Our Team</h3>
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="text-3xl font-bold text-center mb-12"
+            >
+              Meet Our Team
+            </motion.h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
               {[
-                { name: 'Olalere Taiwo', image: '/presenters/taiwo.jpg', role: 'Chairman' ,bio: '' },
-                { name: ' Temitope Raifu', image: '/presenters/prep2.jpg', role: 'OAP' ,bio: 'Meet Temitope Raifu, popularly know as LONGSTORY. As editor and a presenter at Glorious Twins Radio Ibadan.. born and raise in ondo state ikare Akoko... Im here to give the best' },
-                { name: 'M Crown', image: '/presenters/prep1.jpg', role: 'Studio ENGR/OAP' , bio: 'Owofade Mayowa Mary Popularly known as Mrown is a media versatile media professional; a studio engineer, On Air Personality (OAP), graphic designer and professional video editor. With her experience in the media industry, she’s ready to inform, educate and entertain the general public. Stay tuned!!!' },
-                { name: 'Oloyode Abolaji Faruq', image: '/presenters/prep3.jpg', role: 'Manager/OAP' ,bio: 'Meet Oloyede Abolaji Faruq, popularly know as AWIYE EDE. The manager of Glorious Twins Radio, Ibadan. Born and raised in Ibadan, Oyo State, he attended Aunty Ayo Secondary School in the Olunde area and later studied Mass Communication at The Polytechnic, Ibadan. He’s here to keep you inspired and entertained with unending vibes.' },
-
+                { name: 'Olalere Taiwo', image: '/presenters/taiwo.jpg', role: 'Chairman', bio: '' },
+                { name: 'Temitope Raifu', image: '/presenters/prep2.jpg', role: 'OAP', bio: 'Meet Temitope Raifu, popularly know as LONGSTORY. As editor and a presenter at Glorious Twins Radio Ibadan. Born and raise in ondo state ikare Akoko. Im here to give the best' },
+                { name: 'M Crown', image: '/presenters/prep1.jpg', role: 'Studio ENGR/OAP', bio: 'Owofade Mayowa Mary Popularly known as Mrown is a media versatile media professional; a studio engineer, On Air Personality (OAP), graphic designer and professional video editor. With her experience in the media industry, she\'s ready to inform, educate and entertain the general public. Stay tuned!!!' },
+                { name: 'Oloyode Abolaji Faruq', image: '/presenters/prep3.jpg', role: 'Manager/OAP', bio: 'Meet Oloyede Abolaji Faruq, popularly know as AWIYE EDE. The manager of Glorious Twins Radio, Ibadan. Born and raised in Ibadan, Oyo State, he attended Aunty Ayo Secondary School in the Olunde area and later studied Mass Communication at The Polytechnic, Ibadan. He\'s here to keep you inspired and entertained with unending vibes.' },
               ].map((p, idx) => (
-                <div key={idx} className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-800">
-                  <div className="relative w-full h-64">
-                    <Image src={p.image} alt={p.name} fill className="object-cover rounded-t-2xl" sizes="(max-width: 768px) 100vw, 33vw" />
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 group"
+                >
+                  <div className="relative w-full h-64 overflow-hidden">
+                    <Image
+                      src={p.image}
+                      alt={p.name}
+                      fill
+                      className="object-cover rounded-t-2xl group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                   </div>
                   <div className="p-6 text-center">
-                    <h4 className="text-lg font-bold text-gray-900 dark:text-white">{p.name}</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{p.role}</p>
-                    <p className="text-sm text-gray-900 dark:text-gray-200 mt-1">{p.bio}</p>
+                    <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{p.name}</h4>
+                    <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium mb-3">{p.role}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{p.bio}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
 
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center max-w-3xl mx-auto mb-12"
+          >
             <p className="text-lg text-gray-300 italic">
               "At GloriousTwin FM, we go beyond just radio — we are a voice for the people, a hub for inspiration,
               and a celebration of culture, faith, and creativity. From heartwarming music to powerful conversations,
               we connect our community with purpose, passion, and excellence."
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
             <div>
               <h3 className="text-xl font-bold mb-4 text-emerald-400">Connect With Us</h3>
               <div className="flex space-x-4">
@@ -344,14 +540,20 @@ export default function Home() {
                 <p>📍 Block B, Shop 19, Bashorun Islamic Ultra-Modern Complex, Ibadan, Oyo State, Nigeria</p>
                 <p>📞 +234 803 460 1101 , +234 915 987 9319</p>
                 <p>⏰ Station operations: 5AM - 12AM daily</p>
-                <p>✉️ glorioustwinsmediahub@gmail.com</p>
+                <p>✉️ glorioustwinsradio@gmail.com</p>
               </address>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="border-t border-gray-800 mt-12 pt-6 text-center text-gray-400">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="border-t border-gray-800 mt-12 pt-6 text-center text-gray-400"
+          >
             <p>© {year} GloriousTwins Radio | All Rights Reserved</p>
-          </div>
+          </motion.div>
         </div>
       </footer>
 
@@ -365,4 +567,3 @@ export default function Home() {
     </div>
   )
 }
-
