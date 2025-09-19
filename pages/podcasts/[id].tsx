@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,7 +27,14 @@ export default function PodcastPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const audioRef = useState<HTMLAudioElement | null>(null);
+  
+  // FIXED: useRef instead of useState
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  // FIXED: Proper ref callback
+  const setAudioRef = useCallback((element: HTMLAudioElement | null) => {
+    audioRef.current = element;
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -242,8 +249,9 @@ export default function PodcastPage() {
                 </span>
               </div>
 
+              {/* FIXED: Audio element with proper ref */}
               <audio
-                ref={audioRef}
+                ref={setAudioRef}
                 src={podcast.audioUrl}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleLoadedMetadata}
