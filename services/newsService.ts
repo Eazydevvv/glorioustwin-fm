@@ -46,7 +46,7 @@ export const newsService = {
   },
 
   // Update news (admin only)
-  updateNews: async (id: string, newsData: Partial<News>): Promise<News> => {
+  : async (id: string, newsData: Partial<News>): Promise<News> => {
     const response = await fetch(`${API_URL}/api/news/${id}`, {
       method: 'PUT',
       headers: authHeaders(),

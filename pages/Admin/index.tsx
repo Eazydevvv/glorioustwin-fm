@@ -11,7 +11,7 @@ export default function AdminDashboard() {
           <Link className="block bg-emerald-600 text-white px-4 py-2 rounded" href="/Admin/new">
             Create News
           </Link>
-          <Link className="block bg-emerald-600 text-white px-4 py-2 rounded" href="/Admin/podcasts">
+          <Link className="block bg-emerald-600 text-white px-4 py-2 rounded" href="/Admin/UploadPodcast">
             Create Podcast
           </Link>
         </div>

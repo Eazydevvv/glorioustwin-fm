@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import RequireAuth from "../../pages/RequireAuth";
+import Link from "next/link";
+
 
 export default function UploadPodcast() {
   const [form, setForm] = useState({
@@ -162,7 +164,16 @@ export default function UploadPodcast() {
             {message}
           </div>
         )}
+        
       </div>
+      <div className="space-y-3">
+          <Link className="block bg-emerald-600 text-white px-4 py-2 rounded" href="/podcasts">
+            CHECK PODCAST
+          </Link>
+         
+        </div>
+
+      
     </RequireAuth>
   );
 }
