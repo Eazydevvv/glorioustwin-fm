@@ -1,5 +1,5 @@
 // utils/api.ts (frontend)
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://glorious-twins-backend.onrender.com';
 
 // Get auth headers with token
 // utils/api.ts
