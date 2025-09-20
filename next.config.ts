@@ -1,15 +1,26 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost', 'www.glorioustwinsradio.com.ng', 'www.glorioustwinsradio.com.ng'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'yourdomain.com',
+        hostname: 'glorious-twins-backend.onrender.com',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '5000',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.glorioustwinsradio.com.ng',
+        pathname: '/**',
+      },
     ],
-  }
+  },
+  // Remove the deprecated 'domains' option
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;
