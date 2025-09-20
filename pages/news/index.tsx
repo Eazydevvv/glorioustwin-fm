@@ -221,26 +221,7 @@ export default function NewsPage() {
           </div>
         )}
 
-        {/* Admin Call-to-Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-8 text-white">
-            <h3 className="text-2xl font-bold mb-4">Want to share news?</h3>
-            <p className="text-emerald-100 mb-6">
-              Administrators can create and manage news articles through the admin panel
-            </p>
-            <Link
-              href="/Admin/login"
-              className="inline-flex items-center bg-white text-emerald-600 hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition-colors"
-            >
-              Admin Login
-            </Link>
-          </div>
-        </motion.div>
+       
       </div>
 
       {/* Footer */}

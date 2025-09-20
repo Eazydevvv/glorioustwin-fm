@@ -31,9 +31,7 @@ export default function NewsUploadPage() {
 
       const res = await fetch(`${API_URL}/api/news`, {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
+      
         body: formData,
       });
 
