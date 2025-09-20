@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import RequireAuth from "../../pages/RequireAuth";
 import Link from "next/link";
 
 
@@ -74,7 +73,7 @@ export default function UploadPodcast() {
   };
 
   return (
-    <RequireAuth>
+    
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
         <h1 className="text-2xl font-bold mb-4">Upload Podcast</h1>
         
@@ -174,6 +173,6 @@ export default function UploadPodcast() {
         </div>
 
       
-    </RequireAuth>
+    
   );
 }

@@ -1,10 +1,9 @@
 "use client";
 import Link from "next/link";
-import RequireAuth from "../../pages/RequireAuth";
 
 export default function AdminDashboard() {
   return (
-    <RequireAuth>
+    
       <div className="max-w-2xl mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
         <div className="space-y-3">
@@ -16,6 +15,6 @@ export default function AdminDashboard() {
           </Link>
         </div>
       </div>
-    </RequireAuth>
+   
   );
 }

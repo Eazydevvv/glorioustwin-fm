@@ -460,7 +460,6 @@ export default function Home() {
               {[
                 { name: 'Olalere Taiwo', image: '/presenters/taiwo.jpg', role: 'Chairman', bio: '' },
                 { name: 'Temitope Raifu', image: '/presenters/prep2.jpg', role: 'OAP', bio: 'Meet Temitope Raifu, popularly know as LONGSTORY. As editor and a presenter at Glorious Twins Radio Ibadan. Born and raise in ondo state ikare Akoko. Im here to give the best' },
-                { name: 'M Crown', image: '/presenters/prep1.jpg', role: 'Studio ENGR/OAP', bio: 'Owofade Mayowa Mary Popularly known as Mrown is a media versatile media professional; a studio engineer, On Air Personality (OAP), graphic designer and professional video editor. With her experience in the media industry, she\'s ready to inform, educate and entertain the general public. Stay tuned!!!' },
                 { name: 'Oloyode Abolaji Faruq', image: '/presenters/prep3.jpg', role: 'Manager/OAP', bio: 'Meet Oloyede Abolaji Faruq, popularly know as AWIYE EDE. The manager of Glorious Twins Radio, Ibadan. Born and raised in Ibadan, Oyo State, he attended Aunty Ayo Secondary School in the Olunde area and later studied Mass Communication at The Polytechnic, Ibadan. He\'s here to keep you inspired and entertained with unending vibes.' },
               ].map((p, idx) => (
                 <motion.div
