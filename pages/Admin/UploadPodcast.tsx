@@ -73,10 +73,10 @@ export default function UploadPodcast() {
   };
 
   return (
-    
+    <>
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
         <h1 className="text-2xl font-bold mb-4">Upload Podcast</h1>
-        
+  
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             name="title"
@@ -86,7 +86,7 @@ export default function UploadPodcast() {
             className="w-full p-2 border rounded"
             required
           />
-
+  
           <textarea
             name="description"
             placeholder="Description *"
@@ -95,7 +95,7 @@ export default function UploadPodcast() {
             className="w-full p-2 border rounded h-20"
             required
           />
-
+  
           <input
             name="host"
             placeholder="Host *"
@@ -104,7 +104,7 @@ export default function UploadPodcast() {
             className="w-full p-2 border rounded"
             required
           />
-
+  
           <input
             name="duration"
             placeholder="Duration * (e.g., 30 minutes)"
@@ -113,7 +113,7 @@ export default function UploadPodcast() {
             className="w-full p-2 border rounded"
             required
           />
-
+  
           <select
             name="category"
             value={form.category}
@@ -125,7 +125,7 @@ export default function UploadPodcast() {
             <option value="News">News</option>
             <option value="Sports">Sports</option>
           </select>
-
+  
           <div>
             <label className="block mb-1 font-medium">Cover Image (Optional)</label>
             <input
@@ -135,7 +135,7 @@ export default function UploadPodcast() {
               className="w-full p-2 border rounded"
             />
           </div>
-
+  
           <div>
             <label className="block mb-1 font-medium">Audio File *</label>
             <input
@@ -146,7 +146,7 @@ export default function UploadPodcast() {
               required
             />
           </div>
-
+  
           <button
             type="submit"
             disabled={loading}
@@ -155,24 +155,30 @@ export default function UploadPodcast() {
             {loading ? "Uploading..." : "Upload Podcast"}
           </button>
         </form>
-
+  
         {message && (
-          <div className={`mt-4 p-3 rounded ${
-            message.includes("✅") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-          }`}>
+          <div
+            className={`mt-4 p-3 rounded ${
+              message.includes("✅")
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
             {message}
           </div>
         )}
-        
       </div>
+  
+      {/* ✅ Wrapped this inside the same parent */}
       <div className="space-y-3">
-          <Link className="block bg-emerald-600 text-white px-4 py-2 rounded" href="/podcasts">
-            CHECK PODCAST
-          </Link>
-         
-        </div>
-
-      
-    
+        <Link
+          className="block bg-emerald-600 text-white px-4 py-2 rounded"
+          href="/podcasts"
+        >
+          CHECK PODCAST
+        </Link>
+      </div>
+    </>
   );
+  
 }
