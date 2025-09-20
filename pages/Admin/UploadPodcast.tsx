@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-
 export default function UploadPodcast() {
   const [form, setForm] = useState({
     title: "",
@@ -28,12 +27,6 @@ export default function UploadPodcast() {
     setMessage("");
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setMessage("❌ Please login first");
-        return;
-      }
-
       const formData = new FormData();
       
       // Add text fields
@@ -49,9 +42,6 @@ export default function UploadPodcast() {
 
       const response = await fetch("http://localhost:5000/api/podcasts", {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
         body: formData,
       });
 
@@ -169,7 +159,6 @@ export default function UploadPodcast() {
         )}
       </div>
   
-      {/* ✅ Wrapped this inside the same parent */}
       <div className="space-y-3">
         <Link
           className="block bg-emerald-600 text-white px-4 py-2 rounded"
@@ -180,5 +169,4 @@ export default function UploadPodcast() {
       </div>
     </>
   );
-  
 }

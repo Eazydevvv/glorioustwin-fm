@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { API_URL, authHeaders } from "../../utils/api";
+import { API_URL } from "../../utils/api"; // ✅ removed authHeaders
 
 export default function NewsUploadPage() {
   const router = useRouter();
@@ -31,8 +31,7 @@ export default function NewsUploadPage() {
 
       const res = await fetch(`${API_URL}/api/news`, {
         method: "POST",
-      
-        body: formData,
+        body: formData, // ✅ no headers, no token
       });
 
       const data = await res.json();
@@ -59,7 +58,7 @@ export default function NewsUploadPage() {
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
       <h1 className="text-2xl font-bold mb-4">Create News</h1>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -131,9 +130,13 @@ export default function NewsUploadPage() {
       </form>
 
       {message && (
-        <div className={`mt-4 p-3 rounded ${
-          message.includes("✅") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-        }`}>
+        <div
+          className={`mt-4 p-3 rounded ${
+            message.includes("✅")
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
           {message}
         </div>
       )}
